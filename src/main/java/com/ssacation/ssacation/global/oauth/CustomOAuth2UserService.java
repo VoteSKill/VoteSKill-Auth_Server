@@ -10,9 +10,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.ssacation.ssacation.user.SocialType;
-import com.ssacation.ssacation.user.UserEntity;
-import com.ssacation.ssacation.user.UserRepository;
+import com.ssacation.ssacation.user.model.SocialType;
+import com.ssacation.ssacation.user.model.UserEntity;
+import com.ssacation.ssacation.user.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.Map;

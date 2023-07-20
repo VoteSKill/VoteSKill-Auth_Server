@@ -10,9 +10,9 @@ import com.ssacation.ssacation.global.oauth.userinfo.GoogleOAuth2UserInfo;
 import com.ssacation.ssacation.global.oauth.userinfo.KakaoOAuth2UserInfo;
 import com.ssacation.ssacation.global.oauth.userinfo.NaverOAuth2UserInfo;
 import com.ssacation.ssacation.global.oauth.userinfo.OAuth2UserInfo;
-import com.ssacation.ssacation.user.Role;
-import com.ssacation.ssacation.user.SocialType;
-import com.ssacation.ssacation.user.UserEntity;
+import com.ssacation.ssacation.user.model.Role;
+import com.ssacation.ssacation.user.model.SocialType;
+import com.ssacation.ssacation.user.model.UserEntity;
 
 /**
  * 각 소셜에서 받아오는 데이터가 다르므로

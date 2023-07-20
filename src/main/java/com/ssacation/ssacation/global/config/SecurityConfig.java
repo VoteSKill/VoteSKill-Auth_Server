@@ -10,7 +10,7 @@ import com.ssacation.ssacation.global.login.LoginSuccessHandler;
 import com.ssacation.ssacation.global.oauth.CustomOAuth2UserService;
 import com.ssacation.ssacation.global.oauth.OAuth2LoginFailureHandler;
 import com.ssacation.ssacation.global.oauth.OAuth2LoginSuccessHandler;
-import com.ssacation.ssacation.user.UserRepository;
+import com.ssacation.ssacation.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -150,8 +150,7 @@ public class SecurityConfig {
   @Bean
   public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
 
-    JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService,
-        userRepository);
+    JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService,userRepository);
 
     return jwtAuthenticationFilter;
   }

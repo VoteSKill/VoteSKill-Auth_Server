@@ -1,5 +1,10 @@
-package com.ssacation.ssacation.user;
+package com.ssacation.ssacation.user.service;
 
+import com.ssacation.ssacation.user.common.Role;
+import com.ssacation.ssacation.user.entity.UserEntity;
+import com.ssacation.ssacation.user.dto.UserSignUpDto;
+import com.ssacation.ssacation.user.dto.UserUpdateDTO;
+import com.ssacation.ssacation.user.repository.UserRepository;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;

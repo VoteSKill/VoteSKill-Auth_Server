@@ -1,4 +1,4 @@
-package com.ssacation.ssacation.user;
+package com.ssacation.ssacation.user.dto;
 
 import java.sql.Date;
 import java.util.Objects;

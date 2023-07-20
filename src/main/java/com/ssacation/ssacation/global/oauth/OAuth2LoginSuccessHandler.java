@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.ssacation.ssacation.global.jwt.JwtService;
-import com.ssacation.ssacation.user.Role;
+import com.ssacation.ssacation.user.common.Role;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

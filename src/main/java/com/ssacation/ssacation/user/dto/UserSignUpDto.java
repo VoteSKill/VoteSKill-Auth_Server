@@ -1,4 +1,4 @@
-package com.ssacation.ssacation.user;
+package com.ssacation.ssacation.user.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,7 @@
-package com.ssacation.ssacation.user;
+package com.ssacation.ssacation.user.repository;
 
+import com.ssacation.ssacation.user.common.SocialType;
+import com.ssacation.ssacation.user.entity.UserEntity;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

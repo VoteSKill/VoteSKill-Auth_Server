@@ -10,7 +10,7 @@ import com.ssacation.ssacation.global.login.LoginSuccessHandler;
 import com.ssacation.ssacation.global.oauth.CustomOAuth2UserService;
 import com.ssacation.ssacation.global.oauth.OAuth2LoginFailureHandler;
 import com.ssacation.ssacation.global.oauth.OAuth2LoginSuccessHandler;
-import com.ssacation.ssacation.user.UserRepository;
+import com.ssacation.ssacation.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -44,45 +44,45 @@ public class SecurityConfig {
   private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
   private final CustomOAuth2UserService customOAuth2UserService;
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-          .formLogin().disable() // FormLogin 사용 안함
-          .httpBasic().disable() // httpBasic 사용 안함
-          .csrf().disable() // csrf 보안 사용 안함
-          .headers().frameOptions().disable()
-          .and()
-
-          // 세션 사용하지 않으므로 STATELESS로 설정
-          .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-          .and()
-
-        // URL별 권한 관리 옵션
-        .authorizeRequests()
-
-        // 아이콘, css, js 관련
-        // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, swagger-ui에 접근 가능
-        .requestMatchers ("/", "/sign-up", "/css/**", "/images/**", "/js/**", "/favicon.ico",
-            "/v3/api-docs/**", "/swagger-ui/**")
-        .permitAll()
-        .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
-        .and()
-
-        // 소셜 로그인 설정
-        .oauth2Login()
-        .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때 Handler 설정
-        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
-        .userInfoEndpoint().userService(customOAuth2UserService); // customUserService 설정
-
-    // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
-    // 따라서, LogoutFilter 이후에 우리가 만든 필터 동작하도록 설정
-    // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter ->
-    // CustomJsonUsernamePasswordAuthenticationFilter
-    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
-    http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
-
-    return http.build();
-  }
+//  @Bean
+//  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//    http
+//          .formLogin().disable() // FormLogin 사용 안함
+//          .httpBasic().disable() // httpBasic 사용 안함
+//          .csrf().disable() // csrf 보안 사용 안함
+//          .headers().frameOptions().disable()
+//          .and()
+//
+//          // 세션 사용하지 않으므로 STATELESS로 설정
+//          .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//          .and()
+//
+//        // URL별 권한 관리 옵션
+//        .authorizeRequests()
+//
+//        // 아이콘, css, js 관련
+//        // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, swagger-ui에 접근 가능
+//        .requestMatchers ("/", "/sign-up", "/css/**", "/images/**", "/js/**", "/favicon.ico",
+//            "/v3/api-docs/**", "/swagger-ui/**")
+//        .permitAll()
+//        .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
+//        .and()
+//
+//        // 소셜 로그인 설정
+//        .oauth2Login()
+//        .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때 Handler 설정
+//        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
+//        .userInfoEndpoint().userService(customOAuth2UserService); // customUserService 설정
+//
+//    // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
+//    // 따라서, LogoutFilter 이후에 우리가 만든 필터 동작하도록 설정
+//    // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter ->
+//    // CustomJsonUsernamePasswordAuthenticationFilter
+//    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
+//    http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
+//
+//    return http.build();
+//  }
 
   @Bean
   public PasswordEncoder passwordEncoder() {

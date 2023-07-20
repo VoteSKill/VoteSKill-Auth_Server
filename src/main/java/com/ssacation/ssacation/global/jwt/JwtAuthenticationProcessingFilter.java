@@ -14,8 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ssacation.ssacation.user.UserEntity;
-import com.ssacation.ssacation.user.UserRepository;
+import com.ssacation.ssacation.user.entity.UserEntity;
+import com.ssacation.ssacation.user.repository.UserRepository;
 
 
 import java.io.IOException;
@@ -124,7 +124,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    log.info("checkAccessTokenAndAuthentication() 호출");
+    log.info("checkAccessTokenAndAuthentication() 호출 ");
 
     jwtService.extractAccessToken(request)
         .filter(jwtService::isTokenValid)

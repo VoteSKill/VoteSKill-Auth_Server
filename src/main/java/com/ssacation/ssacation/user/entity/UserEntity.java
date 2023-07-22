@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;

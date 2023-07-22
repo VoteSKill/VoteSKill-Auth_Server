@@ -1,6 +1,6 @@
 package com.ssacation.ssacation.global.oauth;
 
-import jakarta.servlet.ServletException;
+import javax.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 import com.ssacation.ssacation.global.jwt.JwtService;
 import com.ssacation.ssacation.user.common.Role;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -35,7 +36,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
         response.addHeader(jwtService.getAccessHeader(), "Bearer " + accessToken);
-        response.sendRedirect("/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
+        Cookie cookie = new Cookie("access_token",accessToken);
+        cookie.setPath("/");
+//        cookie.setHttpOnly(true);
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
+        response.sendRedirect("http://localhost:3000/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
         jwtService.sendAccessAndRefreshToken(response, accessToken, null);
         // Role을 Guest에서 User로

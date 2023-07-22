@@ -1,36 +1,34 @@
-// WebClient를 활용한 SNS 로그인 컨트롤러
-// package com.ssacation.ssacation.global.oauth;
 
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RequestParam;
-// import org.springframework.web.bind.annotation.ResponseBody;
-// import org.springframework.web.bind.annotation.RestController;
+ package com.ssacation.ssacation.global.oauth;
 
-// import lombok.AllArgsConstructor;
+ import com.fasterxml.jackson.core.JsonProcessingException;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @AllArgsConstructor
-// @RequestMapping("/oauth")
-// public class OAuthController {
+ import lombok.AllArgsConstructor;
 
-// private final OAuthService oAuthService;
+ @RestController
+ @AllArgsConstructor
+ @RequestMapping("/oauth")
+ public class OAuthController {
 
-// /**
-// * 카카오 callback
-// * [GET] /oauth/kakao/callback
-// */
-// @ResponseBody
-// @GetMapping("/kakao")
-// public ResponseEntity<?> kakaoCallback(@RequestParam String code) {
+ private final OAuthService oAuthService;
 
-// // accessToken 발급받기
-// // String accessToken = oAuthService.getKakaoAccessToken(code);
+ /**
+ * 카카오 callback
+ * [GET] /oauth/kakao/callback
+ */
+ @CrossOrigin
+ @ResponseBody
+ @GetMapping("/kakao")
+ public ResponseEntity<?> kakaoCallback(@RequestParam String code) throws JsonProcessingException {
+//  accessToken 발급받기
+  String accessToken = oAuthService.getKakaoAccessToken(code);
+  System.out.println("zzz");
 
-// // userInfo 받아오기
-// // Object userInfo = oAuthService.getUserInfo(accessToken);
+//  userInfo 받아오기
+  Object userInfo = oAuthService.getUserInfo(accessToken);
 
-// return ResponseEntity.ok("성공~!");
-// }
-// }
+ return ResponseEntity.ok("성공~!");
+ }
+ }

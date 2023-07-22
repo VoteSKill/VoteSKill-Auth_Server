@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import java.util.Date;
 import java.util.Optional;
@@ -113,6 +113,7 @@ public class JwtService {
    * 헤더를 가져온 후 "Bearer"를 삭제(""로 replace)
    */
   public Optional<String> extractAccessToken(HttpServletRequest request) {
+
     return Optional.ofNullable(request.getHeader(accessHeader))
         .filter(refreshToken -> refreshToken.startsWith(BEARER))
         .map(refreshToken -> refreshToken.replace(BEARER, ""));

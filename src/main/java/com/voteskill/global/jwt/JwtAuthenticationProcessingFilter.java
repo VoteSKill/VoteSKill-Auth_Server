@@ -37,7 +37,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-  private static final String NO_CHECK_URL = "/login"; // Filter 동작하지 않을 경로 설정
+  private static final String NO_CHECK_URL = ""; // Filter 동작하지 않을 경로 설정
 
   private final JwtService jwtService;
   private final UserRepository userRepository;
@@ -55,7 +55,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
       return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
     }
-
+    if(true) {
+      filterChain.doFilter(request, response);
+      return;
+    }
     // 사용자 요청 헤더에서 RefreshToken 추출
     // -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
     // 사용자의 요청 헤더에 RefreshToken이 있는 경우는, AccessToken이 만료되어 요청한 경우

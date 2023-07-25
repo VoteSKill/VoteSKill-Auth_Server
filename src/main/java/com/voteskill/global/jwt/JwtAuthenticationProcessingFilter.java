@@ -25,7 +25,7 @@ import java.io.IOException;
  * "/login" 이외의 URI 요청이 왔을 때 처리하는 필터
  *
  * 기본적으로 사용자는 요청 헤더에 AccessToken만 담아서 요청
- * AccessToken 만료 시에만 RefreshToken을 요청 헤더에 AccessToken과 함께 요청
+ * 께 요청
  *
  * 1. RefreshToken이 없고, AccessToken이 유효한 경우 -> 인증 성공 처리, RefreshToken을 재발급 없음
  * 2. RefreshToken이 없고, AccessToken이 없거나 유효하지 않은 경우 -> 인증 실패 처리, 403 ERROR
@@ -55,10 +55,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
       return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
     }
-    if(true) {
-      filterChain.doFilter(request, response);
-      return;
-    }
+
     // 사용자 요청 헤더에서 RefreshToken 추출
     // -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
     // 사용자의 요청 헤더에 RefreshToken이 있는 경우는, AccessToken이 만료되어 요청한 경우
@@ -125,19 +122,19 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
    * 인증 허가 처리된 객체를 SecurityContextHolder에 담기
    * 그 후 다음 인증 필터로 진행
    */
-//  public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
-//      FilterChain filterChain) throws ServletException, IOException {
-//
-//    log.info("checkAccessTokenAndAuthentication() 호출 ");
-//
-//    jwtService.extractAccessToken(request)
-//        .filter(jwtService::isTokenValid)
-//        .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-//            .ifPresent(email -> userRepository.findByEmail(email)
-//                .ifPresent(this::saveAuthentication)));
-//
-//    filterChain.doFilter(request, response);
-//  }
+  public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain) throws ServletException, IOException {
+
+    log.info("checkAccessTokenAndAuthentication() 호출 ");
+
+    jwtService.extractAccessToken(request)
+        .filter(jwtService::isTokenValid)
+        .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+            .ifPresent(email -> userRepository.findByEmail(email)
+                .ifPresent(this::saveAuthentication)));
+
+    filterChain.doFilter(request, response);
+  }
 
   /**
    * 인증 허가 메소드
@@ -156,21 +153,21 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
    * SecurityContextHolder.getContext()로 SecurityContext를 꺼낸 후,
    * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
    */
-//  public void saveAuthentication(UserEntity myUser) {
-//    String password = myUser.getPassword();
-//    if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
-//      password = PasswordUtil.generateRandomPassword();
-//    }
-//
-//    UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-//        .username(myUser.getEmail())
-//        .password(password)
-//        .roles(myUser.getRole().name())
-//        .build();
-//
-//    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
-//        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
-//
-//    SecurityContextHolder.getContext().setAuthentication(authentication);
-//  }
+  public void saveAuthentication(UserEntity myUser) {
+    String password = null;
+    if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
+      password = PasswordUtil.generateRandomPassword();
+    }
+
+    UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+        .username(myUser.getEmail())
+        .password(password)
+        .roles(myUser.getRole().name())
+        .build();
+
+    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
+        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
 }

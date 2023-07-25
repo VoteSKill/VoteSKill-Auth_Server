@@ -3,6 +3,7 @@
 
  import com.fasterxml.jackson.core.JsonProcessingException;
  import com.voteskill.global.oauth.service.OAuthService;
+ import com.voteskill.user.dto.UserOauthInfoDto;
  import org.springframework.http.ResponseEntity;
  import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,9 @@
   String accessToken = oAuthService.getKakaoAccessToken(code);
 
 //  userInfo 받아오기
-  Object userInfo = oAuthService.getUserInfo(accessToken);
-  System.out.println(userInfo);
+  UserOauthInfoDto userInfo = oAuthService.getUserInfo(accessToken);
 // Todo: 회원 유무 확인 및 jwt token 반환
- return ResponseEntity.ok("성공~!");
+
+ return ResponseEntity.ok(userInfo);
  }
  }

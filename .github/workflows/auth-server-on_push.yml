@@ -57,5 +57,4 @@ jobs:
           --application-name voteskill-codedeploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name voteskill-auth-server
-
           --s3-location bucket=voteskill-s3-auth-server,key=voteskill-auth-server-build.zip,bundleType=zip

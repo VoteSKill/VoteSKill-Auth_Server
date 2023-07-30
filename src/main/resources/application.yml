@@ -3,16 +3,13 @@ spring:
     import:
       - classpath:application-oauth.yml
 
-  profiles:
-    active: secret
-#
-#  datasource:
-#    url: ${url}
-#    username: ${username}
-#    password: ${password}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    hikari:
-#      maximum-pool-size: 5
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
 
   jpa:
     open-in-view: true # 웹 요청이 완료될 때까지 동일한 EntityManager를 갖도록 하는 설정이지만, 성능과 확장성 면에서 떨어짐 (기본값)

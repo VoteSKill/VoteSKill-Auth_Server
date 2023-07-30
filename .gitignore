@@ -37,6 +37,4 @@ out/
 .vscode/
 
 ### Secrets file ###
-/src/main/resources/application-oauth.yml
-/src/main/resources/application-secret.yml
 /src/main/resources/secretKey.properties

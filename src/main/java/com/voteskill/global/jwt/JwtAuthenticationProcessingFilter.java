@@ -33,7 +33,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL = "/login"; // Filter 동작하지 않을 경로 설정
+    private static final String NO_CHECK_URL = "/users"; // Filter 동작하지 않을 경로 설정
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -45,12 +45,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         FilterChain filterChain)
         throws ServletException, IOException {
 
-        if (request.getRequestURI().equals(NO_CHECK_URL)) {
+      log.info("doFilterInternal 호출 :{}",request.getRequestURI());
+
+        if (request.getRequestURI().equals(NO_CHECK_URL) || request.getRequestURI().equals("/oauth")) {
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
 
             return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
 
         }
+
 
         // 사용자 요청 헤더에서 RefreshToken 추출
         // -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
@@ -123,7 +126,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         jwtService.extractAccessToken(request)
             .filter(jwtService::isTokenValid)
             .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-                .ifPresent(email -> saveAuthentication(userRepository.findBySocialId(email))));
+                .ifPresent(email -> saveAuthentication(userRepository.findBySocialId(email).get())));
 //                .ifPresent(this::saveAuthentication)));
         if (jwtService.extractAccessToken(request).isPresent()) {
           if (!jwtService.isTokenValid(jwtService.extractAccessToken(request).get())) {

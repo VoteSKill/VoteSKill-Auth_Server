@@ -22,13 +22,12 @@ public class OAuthController {
      */
     @CrossOrigin
     @ResponseBody
-    @GetMapping("/kakao/callback")
+    @GetMapping("")
     public ResponseEntity<?> kakaoCallback(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         //  accessToken 발급받기
         String accessToken = oAuthService.getKakaoAccessToken(code);
         //  userInfo 받아오기
         UserOauthInfoDto userInfo = oAuthService.getUserInfo(accessToken);
-        System.out.println(userInfo); //userInfo 에 담긴 것 : nickname
 
         // Todo: 회원 유무 확인 및 jwt token 반환
         UserOauthInfoDto userOauthInfoDto = oAuthService.checkRegistedUser(userInfo, response);

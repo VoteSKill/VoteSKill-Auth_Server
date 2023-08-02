@@ -1,5 +1,7 @@
 package com.voteskill.global.oauth.handler;
 
+import com.voteskill.user.entity.UserEntity;
+import com.voteskill.user.repository.UserRepository;
 import javax.servlet.ServletException;
 
 import com.voteskill.global.jwt.JwtService;
@@ -21,7 +23,7 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final JwtService jwtService;
-
+  private final UserRepository userRepository;
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
@@ -36,18 +38,18 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
         response.addHeader(jwtService.getAccessHeader(), "Bearer " + accessToken);
-        Cookie cookie = new Cookie("access_token",accessToken);
-        cookie.setPath("/");
-//        cookie.setHttpOnly(true);
-        cookie.setMaxAge(3600);
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("access_token",accessToken);
+//        cookie.setPath("/");
+////        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(3600);
+//        response.addCookie(cookie);
         response.sendRedirect("http://localhost:3000/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
         jwtService.sendAccessAndRefreshToken(response, accessToken, null);
         // Role을 Guest에서 User로
-        // UserEntity findUser = userRepository.findByEmail(oAuth2User.getEmail())
-        // .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
-        // findUser.authorizeUser();
+         UserEntity findUser = userRepository.findBySocialId(oAuth2User.getEmail())
+         .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
+         findUser.authorizeUser();
       } else {
 
         loginSuccess(response, oAuth2User); // 로그인에 성공한 경우 access, refresh 토큰 생성

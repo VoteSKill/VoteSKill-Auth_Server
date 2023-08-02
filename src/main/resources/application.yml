@@ -2,6 +2,7 @@ spring:
   config:
     import:
       - classpath:application-oauth.yml
+      - classpath:application-secret.yml
 
   profiles:
     active: secret

@@ -36,7 +36,7 @@ public class UserController {
    * @throws ParseException
    */
   @Operation(description = "유저 등록 메서드입니다.")
-  @PostMapping("/sign-up")
+  @PostMapping("/")
   public ResponseEntity<String> createUser(@RequestBody UserSignUpDto userSignUpDto) throws Exception {
 
     userService.signUp(userSignUpDto);

@@ -35,6 +35,7 @@ public class UserService {
    */
   public void signUp(UserSignUpDto userSignUpDto) throws Exception {
 
+    log.info("회원가입 시도 : {} {}",userSignUpDto.getSocialId(), userSignUpDto.getNickname());
 
     if (userRepository.findByNickname(userSignUpDto.getNickname()).isPresent()) {
       throw new Exception("이미 존재하는 닉네임입니다.");
@@ -46,6 +47,8 @@ public class UserService {
         .nickname(userSignUpDto.getNickname())
         .role(Role.USER)
         .build();
+
+    log.info("user socialId : {}",user.getSocialId());
 
     userRepository.save(user);
   }
@@ -66,12 +69,12 @@ public class UserService {
    * JPA Repository의 findBy Method를 사용하여 특정 User를 조회
    * find 메소드는 NULL 값일 수도 있으므로 Optional<T>를 반환하지만,
    * Optional 객체의 get() 메소드를 통해 Entity로 변환해서 반환함.
-   * 
+   *
    * @param id
    * @return
    */
   public UserEntity getUser(String id) {
-    return userRepository.findBySocialId(id);
+    return userRepository.findBySocialId(id).get();
   }
 
   public Optional<UserEntity> getUserByNickname(String nickname){

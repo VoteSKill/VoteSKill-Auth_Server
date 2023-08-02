@@ -36,14 +36,7 @@ public class OAuthAttributes {
    */
   public static OAuthAttributes of(SocialType socialType,
                                    String userNameAttributeName, Map<String, Object> attributes) {
-
-    if (socialType == SocialType.NAVER) {
-      return ofNaver(userNameAttributeName, attributes);
-    }
-    if (socialType == SocialType.KAKAO) {
-      return ofKakao(userNameAttributeName, attributes);
-    }
-    return ofGoogle(userNameAttributeName, attributes);
+    return ofKakao(userNameAttributeName, attributes);
   }
 
   private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
@@ -54,21 +47,7 @@ public class OAuthAttributes {
         .build();
   }
 
-  public static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
-    System.out.println(attributes);
-    return OAuthAttributes.builder()
-        .nameAttributeKey(userNameAttributeName)
-        .oauth2UserInfo(new GoogleOAuth2UserInfo(attributes))
-        .build();
-  }
 
-  public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
-    System.out.println(attributes);
-    return OAuthAttributes.builder()
-        .nameAttributeKey(userNameAttributeName)
-        .oauth2UserInfo(new NaverOAuth2UserInfo(attributes))
-        .build();
-  }
 
   /**
    * of메소드로 OAuthAttributes 객체가 생성되어, 유저 정보들이 담긴 OAuth2UserInfo가 소셜 타입별로 주입된 상태

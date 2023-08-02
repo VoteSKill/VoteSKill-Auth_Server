@@ -121,7 +121,7 @@ public class OAuthService {
         userOauthInfoDto.setSocial_id(social_id);
 
         if (userService.getUser(social_id) != null) { //이미 등록된 회원
-            System.out.println("기존회원");
+            log.info("기존 회원 로그인 : {}", social_id);
             userOauthInfoDto.setNickName(userInfo.getNickName());
             userOauthInfoDto.setUser(true);
         }

@@ -1,12 +1,15 @@
 
 package com.voteskill.user.controller;
 
+import com.voteskill.global.jwt.JwtService;
 import com.voteskill.user.entity.UserEntity;
 import com.voteskill.user.service.UserService;
 import com.voteskill.user.dto.UserSignUpDto;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
   private final UserService userService;
+  private final JwtService jwtService;
 
   /**
    * Member 생성
@@ -36,12 +40,12 @@ public class UserController {
    * @throws ParseException
    */
   @Operation(description = "유저 등록 메서드입니다.")
-  @PostMapping("/")
-  public ResponseEntity<String> createUser(@RequestBody UserSignUpDto userSignUpDto) throws Exception {
+  @PostMapping("")
+  public ResponseEntity<?> createUser(@RequestBody UserSignUpDto userSignUpDto, HttpServletRequest request) throws Exception {
+    userSignUpDto.setToken(jwtService.extractAccessToken(request).orElse(null));
+    String nickname = userService.signUp(userSignUpDto);
 
-    userService.signUp(userSignUpDto);
-
-    return ResponseEntity.ok("회원가입 성공!");
+    return ResponseEntity.ok(nickname);
   }
 
   /**

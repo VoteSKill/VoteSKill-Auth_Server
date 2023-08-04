@@ -66,7 +66,7 @@ public class OAuthService {
         ResponseEntity<String> response = rt.exchange(
             "https://kauth.kakao.com/oauth/token", // https://{요청할 서버 주소}
             HttpMethod.POST, // 요청할 방식
-            kakaoTokenRequest, // 요청할 때 보낼 데이터
+            kakaoTokenRequest, // 요청할 때     보낼 데이터
             String.class // 요청 시 반환되는 데이터 타입
         );
         String responseBody = response.getBody();
@@ -82,7 +82,6 @@ public class OAuthService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        System.out.println(accessToken);
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
@@ -119,18 +118,21 @@ public class OAuthService {
         String social_id = userInfo.getSocial_id(); //카카오에서 받아온 유저 정보 중 아이디
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
         userOauthInfoDto.setSocial_id(social_id);
-
+        System.out.println(social_id);
         if (userService.getUser(social_id) != null) { //이미 등록된 회원
             log.info("기존 회원 로그인 : {}", social_id);
             userOauthInfoDto.setNickName(userInfo.getNickName());
             userOauthInfoDto.setUser(true);
+            String ownJwtAccessToken = jwtService.createAccessToken(social_id);
+            String ownJwtRefreshToken = jwtService.createRefreshToken();
+            userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
+            userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);
+            jwtService.sendAccessAndRefreshToken(response, ownJwtAccessToken, ownJwtRefreshToken);
+            return userOauthInfoDto;
         }
 
-        String ownJwtAccessToken = jwtService.createAccessToken(social_id);
-        String ownJwtRefreshToken = jwtService.createRefreshToken();
+        String ownJwtAccessToken = jwtService.createOauthToken(social_id);
         userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
-        userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);
-        jwtService.sendAccessAndRefreshToken(response, ownJwtAccessToken, ownJwtRefreshToken);
         return userOauthInfoDto;
     }
 }

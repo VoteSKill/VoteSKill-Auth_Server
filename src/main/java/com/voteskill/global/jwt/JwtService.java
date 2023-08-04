@@ -62,6 +62,21 @@ public class JwtService {
         .withClaim(EMAIL_CLAIM, id)
         .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용
   }
+  /**
+   * Oauth 인증 Token 생성 메소드
+   */
+  public String createOauthToken(String id){
+    Date now = new Date();
+    return JWT.create() // JWT 토큰을 생성하는 빌더 반환
+        .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정
+        .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
+
+        // 클레임으로는 저희는 email 하나만 사용
+        // 추가적으로 식별자나, 이름 등의 정보를 더 추가 가능
+        // 추가할 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정
+        .withClaim(EMAIL_CLAIM, id)
+        .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용
+  }
 
   /**
    * RefreshToken 생성

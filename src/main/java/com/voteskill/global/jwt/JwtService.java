@@ -59,7 +59,7 @@ public class JwtService {
         // 클레임으로는 저희는 email 하나만 사용
         // 추가적으로 식별자나, 이름 등의 정보를 더 추가 가능
         // 추가할 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정
-        .withClaim(EMAIL_CLAIM, id)
+        .withClaim("nickname", id)
         .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용
   }
   /**

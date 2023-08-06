@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voteskill.global.jwt.JwtService;
 import com.voteskill.user.dto.UserOauthInfoDto;
+import com.voteskill.user.entity.UserEntity;
 import com.voteskill.user.service.UserService;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,12 +119,12 @@ public class OAuthService {
         String social_id = userInfo.getSocial_id(); //카카오에서 받아온 유저 정보 중 아이디
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
         userOauthInfoDto.setSocial_id(social_id);
-        System.out.println(social_id);
-        if (userService.getUser(social_id) != null) { //이미 등록된 회원
+        UserEntity user = userService.getUser(social_id);
+        if (user != null) { //이미 등록된 회원
             log.info("기존 회원 로그인 : {}", social_id);
-            userOauthInfoDto.setNickName(userInfo.getNickName());
+            userOauthInfoDto.setNickName(user.getNickname());
             userOauthInfoDto.setUser(true);
-            String ownJwtAccessToken = jwtService.createAccessToken(social_id);
+            String ownJwtAccessToken = jwtService.createAccessToken(user.getNickname());
             String ownJwtRefreshToken = jwtService.createRefreshToken();
             userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
             userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);

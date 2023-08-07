@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/oauth")
+@CrossOrigin
 public class OAuthController {
 
     private final OAuthService oAuthService;
